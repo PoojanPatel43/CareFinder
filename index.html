@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareFinder Client (Enhanced)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 15px 0 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result, #table-view, #error-log {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+        }
+        #error-log {
+            background-color: #ffeeee;
+            margin: auto;
+            padding: auto;
+        }
+        #table-view table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #table-view th, #table-view td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        #table-view th {
+            background-color: #007bff;
+            color: white;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CareFinder Client (Enhanced)</h1>
+        
+        <label for="endpoint">Select an API Endpoint:</label>
+        <select id="endpoint">
+            <option value="hospitals">Get All Hospitals</option>
+            <option value="hospitals/id">Get Hospital by ID</option>
+            <option value="hospitals/city">Get Hospitals by City</option>
+            <option value="hospitals/state">Get Hospitals by State</option>
+            <option value="hospitals/county">Get Hospitals by County</option>
+            <option value="hospitals/citystate">Get Hospitals by City/State</option>
+            <option value="hospitals/name">Get Hospitals by Name</option>
+        </select>
+
+        <input type="text" id="param1" placeholder="Enter first parameter (optional)" />
+        <input type="text" id="param2" placeholder="Enter second parameter (optional)" />
+
+        <button onclick="sendRequest()">Send Request</button>
+
+        <div class="spinner" id="spinner"></div>
+        <div id="result"></div>
+        <div id="table-view"></div>
+        <div id="error-log"></div>
+    </div>
+
+    <script>
+        const SERVER_URL = 'http://localhost:3000/api';
+
+        function logError(message) {
+            const errorLog = document.getElementById('error-log');
+            const timestamp = new Date().toISOString();
+            errorLog.innerHTML += `[${timestamp}] ${message}\n`;
+            console.error(message);
+        }
+
+        async function sendRequest() {
+            const endpoint = document.getElementById('endpoint').value;
+            const param1 = document.getElementById('param1').value;
+            const param2 = document.getElementById('param2').value;
+        
+            let url = `${SERVER_URL}/${endpoint}`;
+            if (param1) url += `/${param1}`;
+            if (param2) url += `/${param2}`;
+        
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('table-view').innerHTML = '';
+            document.getElementById('error-log').innerHTML = '';
+            const spinner = document.getElementById('spinner');
+            spinner.style.display = 'block';
+        
+            try {
+                logError(`Sending request to: ${url}`);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/xml',
+                    }
+                });
+        
+                logError(`Response status: ${response.status}`);
+                logError(`Response headers: ${JSON.stringify([...response.headers])}`);
+        
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+        
+                const xml = await response.text();
+                document.getElementById('result').innerHTML = `<h2>Raw XML:</h2><pre>${xml}</pre>`;
+        
+                // Log the XML structure for debugging
+                console.log("Raw XML:", xml);
+        
+                // Parse XML and convert it into a table
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xml, "text/xml");
+                console.log("Parsed XML Document:", xmlDoc);
+        
+                const hospitals = xmlDoc.getElementsByTagName("hospital");
+                console.log("Hospitals found:", hospitals.length);
+        
+                if (hospitals.length > 0) {
+                    let table = '<h2>Table View:</h2><table><tr><th>ID</th><th>Name</th><th>City</th><th>State</th><th>ZIP</th><th>Latitude</th><th>Longitude</th></tr>';
+        
+                    Array.from(hospitals).forEach(hospital => {
+                        const id = hospital.getElementsByTagName("id")[0]?.textContent || 'N/A';
+                        const name = hospital.getElementsByTagName("name")[0]?.textContent || 'N/A';
+                        const city = hospital.getElementsByTagName("city")[0]?.textContent || 'N/A';
+                        const state = hospital.getElementsByTagName("state")[0]?.textContent || 'N/A';
+                        const zip = hospital.getElementsByTagName("zip")[0]?.textContent || 'N/A';
+                        const lat = hospital.getElementsByTagName("latitude")[0]?.textContent || 'N/A';
+                        const lng = hospital.getElementsByTagName("longitude")[0]?.textContent || 'N/A';
+        
+                        table += `<tr><td>${id}</td><td>${name}</td><td>${city}</td><td>${state}</td><td>${zip}</td><td>${lat}</td><td>${lng}</td></tr>`;
+                    });
+        
+                    table += '</table>';
+                    document.getElementById('table-view').innerHTML = table;
+                } else {
+                    document.getElementById('table-view').innerHTML = '<p>No hospital data found</p>';
+                }
+        
+            } catch (error) {
+                logError(`Error details: ${error.message}`);
+                document.getElementById('result').innerHTML = `<p style="color: red;">Error fetching data: ${error.message}</p>`;
+                
+                if (error.message.includes('Failed to fetch')) {
+                    logError('Network error detected. Possible reasons:');
+                    logError('1. The server is not running. Make sure to start your Node.js server.');
+                    logError('2. CORS is not properly configured on the server.');
+                    logError(`3. The server URL is incorrect. Current URL: ${SERVER_URL}`);
+                    logError('4. There\'s a network connectivity issue.');
+                }
+            } finally {
+                spinner.style.display = 'none'; // Hide the spinner once the request is complete
+            }
+        }
+        
+    </script>
+</body>
+</html>
