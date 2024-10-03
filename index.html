@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareFinder Client (Enhanced)</title>
+    <title>CareFinder Client</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
             margin: 0;
             padding: 0;
         }
@@ -15,60 +15,73 @@
             max-width: 900px;
             margin: 50px auto;
             background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
         }
         h1 {
             text-align: center;
             color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
         }
         label {
             font-weight: bold;
             display: block;
             margin: 15px 0 5px;
+            color: #444;
         }
         input, select, button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 6px;
             box-sizing: border-box;
         }
         button {
-            background-color: #007bff;
+            background-color: #28a745;
             color: white;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            font-weight: bold;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #218838;
         }
-        #result, #table-view, #error-log {
+        #result, #cards-view, #error-log {
             margin-top: 20px;
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            max-height: 250px;
+            overflow-y: auto;
             white-space: pre-wrap;
+            word-wrap: break-word;
         }
         #error-log {
-            background-color: #ffeeee;
-            margin: auto;
-            padding: auto;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
         }
-        #table-view table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #table-view th, #table-view td {
+        .card {
+            background-color: #fff;
+            padding: 20px;
             border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        #table-view th {
-            background-color: #007bff;
-            color: white;
+        .card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .card p {
+            margin: 5px 0;
+            color: #555;
         }
         .spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
@@ -83,11 +96,18 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>CareFinder Client (Enhanced)</h1>
+        <h1>CareFinder Client </h1>
         
         <label for="endpoint">Select an API Endpoint:</label>
         <select id="endpoint">
@@ -107,9 +127,13 @@
 
         <div class="spinner" id="spinner"></div>
         <div id="result"></div>
-        <div id="table-view"></div>
+        <div id="cards-view"></div>
         <div id="error-log"></div>
     </div>
+
+    <footer>
+        © 2024 CareFinder Client. All rights reserved.
+    </footer>
 
     <script>
         const SERVER_URL = 'http://localhost:3000/api';
@@ -131,7 +155,7 @@
             if (param2) url += `/${param2}`;
         
             document.getElementById('result').innerHTML = '';
-            document.getElementById('table-view').innerHTML = '';
+            document.getElementById('cards-view').innerHTML = '';
             document.getElementById('error-log').innerHTML = '';
             const spinner = document.getElementById('spinner');
             spinner.style.display = 'block';
@@ -155,36 +179,36 @@
                 const xml = await response.text();
                 document.getElementById('result').innerHTML = `<h2>Raw XML:</h2><pre>${xml}</pre>`;
         
-                // Log the XML structure for debugging
-                console.log("Raw XML:", xml);
+                // Manually parse the custom XML format
+                let hospitalData = xml.match(/\d+\w+\n.*?\n.*?\n.*?\n/g);
+                
+                if (hospitalData && hospitalData.length > 0) {
+                    let cards = '<h2>Hospital Information:</h2>';
         
-                // Parse XML and convert it into a table
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(xml, "text/xml");
-                console.log("Parsed XML Document:", xmlDoc);
+                    hospitalData.forEach(hospital => {
+                        const lines = hospital.split('\n').filter(Boolean);
+                        const name = lines[0] || 'N/A';
+                        const address = lines[1] || 'N/A';
+                        const city = lines[2] || 'N/A';
+                        const stateZip = lines[3] || 'N/A';
+                        const state = stateZip.substring(0, 2);
+                        const zip = stateZip.substring(2);
         
-                const hospitals = xmlDoc.getElementsByTagName("hospital");
-                console.log("Hospitals found:", hospitals.length);
-        
-                if (hospitals.length > 0) {
-                    let table = '<h2>Table View:</h2><table><tr><th>ID</th><th>Name</th><th>City</th><th>State</th><th>ZIP</th><th>Latitude</th><th>Longitude</th></tr>';
-        
-                    Array.from(hospitals).forEach(hospital => {
-                        const id = hospital.getElementsByTagName("id")[0]?.textContent || 'N/A';
-                        const name = hospital.getElementsByTagName("name")[0]?.textContent || 'N/A';
-                        const city = hospital.getElementsByTagName("city")[0]?.textContent || 'N/A';
-                        const state = hospital.getElementsByTagName("state")[0]?.textContent || 'N/A';
-                        const zip = hospital.getElementsByTagName("zip")[0]?.textContent || 'N/A';
-                        const lat = hospital.getElementsByTagName("latitude")[0]?.textContent || 'N/A';
-                        const lng = hospital.getElementsByTagName("longitude")[0]?.textContent || 'N/A';
-        
-                        table += `<tr><td>${id}</td><td>${name}</td><td>${city}</td><td>${state}</td><td>${zip}</td><td>${lat}</td><td>${lng}</td></tr>`;
+                        // Create card layout
+                        cards += `
+                            <div class="card">
+                                <h3>${name}</h3>
+                                <p><strong>Address:</strong> ${address}</p>
+                                <p><strong>City:</strong> ${city}</p>
+                                <p><strong>State:</strong> ${state}</p>
+                                <p><strong>ZIP:</strong> ${zip}</p>
+                            </div>
+                        `;
                     });
         
-                    table += '</table>';
-                    document.getElementById('table-view').innerHTML = table;
+                    document.getElementById('cards-view').innerHTML = cards;
                 } else {
-                    document.getElementById('table-view').innerHTML = '<p>No hospital data found</p>';
+                    document.getElementById('cards-view').innerHTML = '<p>No hospital data found</p>';
                 }
         
             } catch (error) {
@@ -202,6 +226,8 @@
                 spinner.style.display = 'none'; // Hide the spinner once the request is complete
             }
         }
+        
+        
         
     </script>
 </body>
