@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareFinder Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #requestSection {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        select, input, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #formattedData {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        #error-log {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>CareFinder Client</h1>
+
+<div id="requestSection">
+    <label for="endpoint">Select an API Endpoint:</label>
+    <select id="endpoint">
+        <option value="hospitals/id">Get Hospital by ID</option>
+        <option value="hospitals/citystate">Get Hospital by City and State</option>
+        <option value="hospitals/name">Get Hospital by Name</option>
+        <option value="hospitals/ownership">Get Hospitals by Ownership</option>
+        <option value="hospitals/zipcode">Get Hospitals by Zip Code</option>
+        <option value="hospitals/range">Get Hospitals by Range</option>
+        <option value="hospitals/type">Get Hospitals by Type</option>
+    </select>
+
+    <input type="text" id="param1" placeholder="Enter first parameter (ID, City, Name, etc.)" />
+    <input type="text" id="param2" placeholder="Enter second parameter (optional)" />
+
+    <button id="sendRequestBtn">Send Request</button>
+
+    <div id="error-log"></div>
+</div>
+
+<div id="formattedData"></div>
+
+<script src="client.js"></script>
+</body>
+</html>
