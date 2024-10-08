@@ -1,6 +1,5 @@
 const SERVER_URL = 'http://localhost:3000/api';
 
-// Log errors for debugging
 function logError(message) {
     const errorLog = document.getElementById('error-log');
     const timestamp = new Date().toISOString();
@@ -8,22 +7,6 @@ function logError(message) {
     console.error(message);
 }
 
-// Function to create a human-readable card from the XML data
-function createHospitalCard(name, address, city, state, zip, type, ownership) {
-    return `
-        <div class="card">
-            <h3>${name}</h3>
-            <p><strong>Address:</strong> ${address}</p>
-            <p><strong>City:</strong> ${city}</p>
-            <p><strong>State:</strong> ${state}</p>
-            <p><strong>ZIP:</strong> ${zip}</p>
-            <p><strong>Type:</strong> ${type}</p>
-            <p><strong>Ownership:</strong> ${ownership}</p>
-        </div>
-    `;
-}
-
-// Send the request to the server and handle the response
 async function sendRequest() {
     const endpoint = document.getElementById('endpoint').value;
     const param1 = document.getElementById('param1').value;
@@ -33,14 +16,16 @@ async function sendRequest() {
     
     if (endpoint === 'hospitals/citystate') {
         if (param1 && param2) {
-            url += `?city=${param1}&state=${param2}`;
+            url += `/${encodeURIComponent(param1)}/${encodeURIComponent(param2)}`;
         } else {
             logError("Please provide both city and state.");
             return;
         }
-    } else {
-        if (param1) url += `/${param1}`;
-        if (param2) url += `/${param2}`;
+    } else if (param1) {
+        url += `/${encodeURIComponent(param1)}`;
+        if (param2) {
+            url += `/${encodeURIComponent(param2)}`;
+        }
     }
 
     document.getElementById('result').innerHTML = '';
@@ -59,23 +44,31 @@ async function sendRequest() {
         });
 
         logError(`Response status: ${response.status}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+        
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            const jsonResponse = await response.json();
+            if (jsonResponse.debugLog) {
+                logError("Debug information:");
+                jsonResponse.debugLog.forEach(log => logError(log));
+            }
+            if (jsonResponse.error) {
+                throw new Error(jsonResponse.error);
+            }
+        } else {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const xml = await response.text();
+            document.getElementById('result').innerHTML = `<h2>Raw XML:</h2><pre>${xml}</pre>`;
+
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xml, "application/xml");
+            const hospitals = xmlDoc.getElementsByTagName("hospital");
+
+            document.getElementById('formattedData').innerHTML = formatXMLData(xml);
         }
-
-        const xml = await response.text();
-        document.getElementById('result').innerHTML = `<h2>Raw XML:</h2><pre>${xml}</pre>`;
-
-        // Parse the XML
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xml, "application/xml");
-        const hospitals = xmlDoc.getElementsByTagName("hospital");
-
-        // Format and display the data
-        document.getElementById('formattedData').innerHTML = formatXMLData(xml);
-
-        // Clear error log
-        // document.getElementById('error-log').innerText = '';
     } catch (error) {
         logError(`Error details: ${error.message}`);
         document.getElementById('result').innerHTML = `<p style="color: red;">Error fetching data: ${error.message}</p>`;

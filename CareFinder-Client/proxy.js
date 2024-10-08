@@ -11,8 +11,17 @@ const API_BASE_URL = 'http://www.knautzfamilywi.com/CareFinder-1.0.0/api';
 app.get('/api/:endpoint/:param1?/:param2?', async (req, res) => {
     const { endpoint, param1, param2 } = req.params;
     let url = `${API_BASE_URL}/${endpoint}`;
-    if (param1) url += `/${param1}`;
-    if (param2) url += `/${param2}`;
+    
+    if (endpoint === 'hospitals/citystate') {
+        if (param1 && param2) {
+            url = `${API_BASE_URL}/hospitals/${encodeURIComponent(param1)}/${encodeURIComponent(param2)}`;
+        } else {
+            return res.status(400).send('Both city and state parameters are required for citystate endpoint');
+        }
+    } else {
+        if (param1) url += `/${encodeURIComponent(param1)}`;
+        if (param2) url += `/${encodeURIComponent(param2)}`;
+    }
 
     console.log(`Requesting URL: ${url}`);
 
