@@ -15,17 +15,16 @@ async function sendRequest() {
     let url = `${SERVER_URL}/${endpoint}`;
     
     if (endpoint === 'hospitals/citystate') {
+        console.log(`City/State Selected: ${param1}, ${param2}`);
         if (param1 && param2) {
             url += `/${encodeURIComponent(param1)}/${encodeURIComponent(param2)}`;
         } else {
             logError("Please provide both city and state.");
             return;
         }
-    } else if (param1) {
-        url += `/${encodeURIComponent(param1)}`;
-        if (param2) {
-            url += `/${encodeURIComponent(param2)}`;
-        }
+    } else {
+        if (param1) url += `/${encodeURIComponent(param1)}`;
+        if (param2) url += `/${encodeURIComponent(param2)}`;
     }
 
     document.getElementById('result').innerHTML = '';
