@@ -28,7 +28,6 @@ async function sendRequest() {
     }
 
     document.getElementById('result').innerHTML = '';
-    document.getElementById('cards-view').innerHTML = '';
     document.getElementById('error-log').innerHTML = '';
     const spinner = document.getElementById('spinner');
     spinner.style.display = 'block';
