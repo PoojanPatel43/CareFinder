@@ -1,5 +1,32 @@
 const SERVER_URL = 'http://localhost:3000/api';
 
+function toggleParameters() {
+    const endpoint = document.getElementById('endpoint').value;
+    const param1Div = document.getElementById('param1Div');
+    const param2Div = document.getElementById('param2Div');
+    const param1Input = document.getElementById('param1');
+    const param2Input = document.getElementById('param2');
+
+    // Reset parameter inputs and hide them initially
+    param1Div.style.display = 'none';
+    param2Div.style.display = 'none';
+    param1Input.value = '';
+    param2Input.value = '';
+
+    // Show appropriate parameter inputs based on selected endpoint
+    if (endpoint === 'hospitals/id' || endpoint === 'hospitals/city' || 
+        endpoint === 'hospitals/state' || endpoint === 'hospitals/county' || 
+        endpoint === 'hospitals/name') {
+        param1Div.style.display = 'block';
+        param1Input.placeholder = "Enter " + endpoint.split('/')[1];
+    } else if (endpoint === 'hospitals/citystate') {
+        param1Div.style.display = 'block';
+        param2Div.style.display = 'block';
+        param1Input.placeholder = "Enter City";
+        param2Input.placeholder = "Enter State";
+    }
+}
+
 function logError(message) {
     const errorLog = document.getElementById('error-log');
     const timestamp = new Date().toISOString();
