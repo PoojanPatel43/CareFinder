@@ -44,12 +44,11 @@ CareFinder/ │ ├── CareFinder-Client/ │ ├── CareFinder_Client.pdf
 
 2. **Install dependencies**:
     ```bash
-    Copy code
     npm install
     
 3. **Start the Node.js proxy server**:
     ```bash
-  node apiProxyServer.js
+    node apiProxyServer.js
 
 4. **Open the index.html file in your browser to interact with the CareFinder client**.
 
