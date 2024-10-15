@@ -29,43 +29,46 @@ CareFinder Client is a user-friendly web application designed to interact with a
 
 - A modern web browser (Chrome, Firefox, Edge, etc.)
 - Internet connection for making API requests.
-
-### Installation
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/PoojanPatel43/carefinder.git
-    ```
-2. Navigate to the project folder:
-    ```bash
-    cd carefinder-client
-    ```
-3. Open `index.html` in your web browser.
-
-### Usage
-
-1. Open the `index.html` file in your preferred browser.
-2. Select the desired API endpoint (e.g., "Get All Hospitals", "Get Hospitals by City").
-3. Enter the required parameters (if any).
-4. Click the "Send Request" button.
-5. View the results in the formatted output section or any errors in the error log.
+- **Node.js**: Ensure you have Node.js installed on your machine.
+- **NPM**: Comes bundled with Node.js.
 
 ## Project Structure
 
-CareFinder/
-│
-├── CareFinder-Client/
-│   ├── CareFinder_Client.pdf
-│   ├── CareFinder_Client.docx
-│   ├── apiProxyServer.js
-│   ├── client.js
-│   ├── index.html
-│   ├── style.css
-│   ├── node_modules/
-│   ├── .gitignore
-│   ├── README.md
-│   ├── package-lock.json
-│   └── package.json
-│
-└── README.md (optional, if you want a general overview of the entire repo)
+CareFinder/ │ ├── CareFinder-Client/ │ ├── CareFinder_Client.pdf # Project documentation in PDF format │ ├── CareFinder_Client.docx # Project documentation in DOCX format │ ├── apiProxyServer.js # Node.js server for handling API requests with CORS │ ├── client.js # JavaScript for handling frontend logic │ ├── index.html # Main HTML file serving as the user interface │ ├── style.css # Styling for the client UI │ ├── node_modules/ # Node.js dependencies (auto-generated) │ ├── .gitignore # Ignores files like node_modules from being pushed to GitHub │ ├── README.md # Project description and setup instructions │ ├── package-lock.json # Lockfile for Node.js dependencies │ └── package.json # Node.js project metadata and dependencies │ └── README.md (this file)
+
+## Setup Instructions
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/CareFinder.git
+   cd CareFinder/CareFinder-Client
+
+Install dependencies:
+
+bash
+Copy code
+npm install
+Start the Node.js proxy server:
+
+bash
+Copy code
+node apiProxyServer.js
+Open the index.html file in your browser to interact with the CareFinder client.
+
+Usage
+Select an endpoint from the dropdown.
+Enter the required parameters in the input fields.
+Click the "Send Request" button to fetch data.
+Results will be displayed below in a formatted manner.
+Known Issues & Bugs
+CORS Policy: API calls from the frontend directly to the server may run into CORS restrictions. The Node.js proxy server apiProxyServer.js is implemented to handle this.
+Data Formatting: Some responses might need additional formatting for better readability.
+UI Improvements: Future versions may include more interactive input fields and enhanced error handling.
+Contributing
+Feel free to open issues or submit pull requests for improvements or bug fixes. All contributions are welcome!
+
+License
+This project is licensed under the MIT License.
+
+© 2024 CareFinder Client. All rights reserved.
+
 
