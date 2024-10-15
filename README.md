@@ -42,19 +42,20 @@ CareFinder/ │ ├── CareFinder-Client/ │ ├── CareFinder_Client.pdf
    git clone https://github.com/your-username/CareFinder.git
    cd CareFinder/CareFinder-Client
 
-Install dependencies:
+2. **Install dependencies**:
 
-bash
-Copy code
-npm install
-Start the Node.js proxy server:
+    ```bash
+  Copy code
+  npm install
 
-bash
-Copy code
-node apiProxyServer.js
-Open the index.html file in your browser to interact with the CareFinder client.
+3. **Start the Node.js proxy server**:
 
-Usage
+  ```bash
+  node apiProxyServer.js
+
+4. **Open the index.html file in your browser to interact with the CareFinder client**.
+
+## Usage
 Select an endpoint from the dropdown.
 Enter the required parameters in the input fields.
 Click the "Send Request" button to fetch data.
