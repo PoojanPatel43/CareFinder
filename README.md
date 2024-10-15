@@ -34,7 +34,18 @@ CareFinder Client is a user-friendly web application designed to interact with a
 
 ## Project Structure
 
-CareFinder/ │ ├── CareFinder-Client/ │ ├── CareFinder_Client.pdf # Project documentation in PDF format │ ├── CareFinder_Client.docx # Project documentation in DOCX format │ ├── apiProxyServer.js # Node.js server for handling API requests with CORS │ ├── client.js # JavaScript for handling frontend logic │ ├── index.html # Main HTML file serving as the user interface │ ├── style.css # Styling for the client UI │ ├── node_modules/ # Node.js dependencies (auto-generated) │ ├── .gitignore # Ignores files like node_modules from being pushed to GitHub │ ├── README.md # Project description and setup instructions │ ├── package-lock.json # Lockfile for Node.js dependencies │ └── package.json # Node.js project metadata and dependencies │ └── README.md (this file)
+- **CareFinder_Client.pdf**: PDF version of the implementation document.
+- **CareFinder_Client.docx**: Word document version of the implementation document.
+- **apiProxyServer.js**: Node.js server that proxies API requests.
+- **client.js**: JavaScript code for handling client-side logic.
+- **index.html**: Main HTML page for the client interface.
+- **style.css**: Styles for the client UI.
+- **node_modules/**: Directory containing dependencies.
+- **.gitignore**: Specifies files and directories that should be ignored by Git.
+- **README.md**: Documentation and instructions for the project.
+- **package-lock.json**: Lockfile for managing Node.js dependencies.
+- **package.json**: Node.js configuration file that lists dependencies and scripts.
+
 
 ## Setup Instructions
 1. **Clone the repository**:
