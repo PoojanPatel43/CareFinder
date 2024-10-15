@@ -52,4 +52,20 @@ CareFinder Client is a user-friendly web application designed to interact with a
 
 ## Project Structure
 
+CareFinder/
+│
+├── CareFinder-Client/
+│   ├── CareFinder_Client.pdf
+│   ├── CareFinder_Client.docx
+│   ├── apiProxyServer.js
+│   ├── client.js
+│   ├── index.html
+│   ├── style.css
+│   ├── node_modules/
+│   ├── .gitignore
+│   ├── README.md
+│   ├── package-lock.json
+│   └── package.json
+│
+└── README.md (optional, if you want a general overview of the entire repo)
 
