@@ -39,7 +39,7 @@ CareFinder/ │ ├── CareFinder-Client/ │ ├── CareFinder_Client.pdf
 ## Setup Instructions
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/CareFinder.git
+   git clone https://github.com/PoojanPatel43/CareFinder.git
    cd CareFinder/CareFinder-Client
 
 2. **Install dependencies**:
