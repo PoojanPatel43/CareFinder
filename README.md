@@ -43,28 +43,28 @@ CareFinder/ │ ├── CareFinder-Client/ │ ├── CareFinder_Client.pdf
    cd CareFinder/CareFinder-Client
 
 2. **Install dependencies**:
-
     ```bash
-  Copy code
-  npm install
-
+    Copy code
+    npm install
+    
 3. **Start the Node.js proxy server**:
-
-  ```bash
+    ```bash
   node apiProxyServer.js
 
 4. **Open the index.html file in your browser to interact with the CareFinder client**.
 
 ## Usage
-Select an endpoint from the dropdown.
-Enter the required parameters in the input fields.
-Click the "Send Request" button to fetch data.
-Results will be displayed below in a formatted manner.
-Known Issues & Bugs
-CORS Policy: API calls from the frontend directly to the server may run into CORS restrictions. The Node.js proxy server apiProxyServer.js is implemented to handle this.
-Data Formatting: Some responses might need additional formatting for better readability.
-UI Improvements: Future versions may include more interactive input fields and enhanced error handling.
-Contributing
+1. Select an endpoint from the dropdown.
+2. Enter the required parameters in the input fields.
+3. Click the "Send Request" button to fetch data.
+4. Results will be displayed below in a formatted manner.
+
+## Known Issues & Bugs
+1. CORS Policy: API calls from the frontend directly to the server may run into CORS restrictions. The Node.js proxy server apiProxyServer.js is implemented to handle this.
+2. Data Formatting: Some responses might need additional formatting for better readability.
+3. UI Improvements: Future versions may include more interactive input fields and enhanced error handling.
+
+## Contributing
 Feel free to open issues or submit pull requests for improvements or bug fixes. All contributions are welcome!
 
 License
